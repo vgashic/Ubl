@@ -11,7 +11,15 @@ namespace Ubl {
             _invoiceSource = invoiceSource;
         }
 
+        // todo change _invoiceSource to Tab_RacOut object
         protected object _invoiceSource;
+        
+        // todo change _supplierParty to Tab_Partner object
+        protected object _supplierParty;
+
+        // todo change _customerParty to Tab_Partner object
+        protected object _customerParty;
+
         protected InvoiceType _invoice;
 
         public virtual void CreateInvoice() {
@@ -39,6 +47,7 @@ namespace Ubl {
 
         protected abstract void SetCurrency();
 
+
         #region InvoicePeriod
 
         protected virtual void SetInvoicePeriod() {
@@ -51,6 +60,7 @@ namespace Ubl {
 
         #endregion
 
+
         #region ContractDocumentReference
 
         protected virtual void SetContractDocumentReference() {
@@ -62,6 +72,7 @@ namespace Ubl {
         protected abstract void SetContractDocumentReferenceID();
 
         #endregion
+
 
         #region AdditionalDocumentReference
 
@@ -79,6 +90,16 @@ namespace Ubl {
 
         #endregion
 
+
+        #region Party
+
+        // todo check if this should be virtual method
+        // todo pass Tab_Partner as parameter
+        protected abstract PartyType GetParty(object _party);
+
+        #endregion
+
+
         #region AccountingSupplierParty
 
         protected virtual void SetAccountingSupplierParty() {
@@ -86,21 +107,47 @@ namespace Ubl {
             SetCustomerAssignedAccountID();
 
             _invoice.AccountingSupplierParty = new SupplierPartyType();
-            SetParty();
+            _invoice.AccountingSupplierParty.Party = GetParty(_supplierParty);
 
         }
 
 
         protected abstract void SetCustomerAssignedAccountID();
 
-        protected virtual void SetParty() {
+        #endregion
+
+
+        #region AccountingCustomerParty
+
+        protected virtual void SetAccountingCustomerParty() {
+
+            _invoice.AccountingCustomerParty = new CustomerPartyType();
+            _invoice.AccountingSupplierParty.Party = GetParty(_customerParty);
 
         }
 
+        #endregion
 
+
+        #region Delivery
+
+        protected virtual void SetDelivery() {
+
+            _invoice.Delivery = new DeliveryType[1];
+            SetActualDeliveryDate();
+
+        }
+
+        protected abstract void SetActualDeliveryDate();
 
         #endregion
 
+
+        #region TaxTotal
+
+        // todo next
+
+        #endregion
 
 
     }
